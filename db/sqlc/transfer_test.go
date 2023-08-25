@@ -9,9 +9,7 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func createRandomTransfer(t *testing.T) Transfers {
-	account1 := createRandomAccount(t)
-	account2 := createRandomAccount(t)
+func createRandomTransfer(t *testing.T, account1, account2 Accounts) Transfers {
 	arg := CreateTransferParams{
 		FromAccountID: account1.ID,
 		ToAccountID:   account2.ID,
@@ -32,11 +30,15 @@ func createRandomTransfer(t *testing.T) Transfers {
 }
 
 func TestCreateTransfer(t *testing.T) {
-	createRandomTransfer(t)
+	account1 := createRandomAccount(t)
+	account2 := createRandomAccount(t)
+	createRandomTransfer(t, account1, account2)
 }
 
 func TestGetTransfer(t *testing.T) {
-	transfer1 := createRandomTransfer(t)
+	account1 := createRandomAccount(t)
+	account2 := createRandomAccount(t)
+	transfer1 := createRandomTransfer(t, account1, account2)
 	transfer2, err := testQueries.GetTransfer(context.Background(), transfer1.ID)
 	require.NoError(t, err)
 	require.NotEmpty(t, transfer2)
@@ -49,13 +51,16 @@ func TestGetTransfer(t *testing.T) {
 }
 
 func TestListTransfers(t *testing.T) {
+	account1 := createRandomAccount(t)
+	account2 := createRandomAccount(t)
 	for i := 0; i < 10; i++ {
-		createRandomTransfer(t)
+		createRandomTransfer(t, account1, account2)
+		createRandomTransfer(t, account2, account1)
 	}
 
 	arg := ListTransfersParams{
-		FromAccountID: 1,
-		ToAccountID:   2,
+		FromAccountID: account1.ID,
+		ToAccountID:   account2.ID,
 		Limit:         5,
 		Offset:        5,
 	}
