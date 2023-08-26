@@ -6,18 +6,17 @@ import (
 
 	"github.com/abdulrahman-02/G-Bank/api"
 	db "github.com/abdulrahman-02/G-Bank/db/sqlc"
+	"github.com/abdulrahman-02/G-Bank/util"
 	_ "github.com/lib/pq"
 )
 
-const (
-	dbDriver      = "postgres"
-	dbSource      = "postgresql://root:password@localhost:5432/G-Bank?sslmode=disable"
-	serverAddress = "localhost:8080"
-)
-
 func main() {
-	var err error
-	conn, err := sql.Open(dbDriver, dbSource)
+	config, err := util.LoadConfig(".")
+	if err != nil {
+		log.Fatal("Cannot load config: ", err)
+	}
+
+	conn, err := sql.Open(config.DBDriver, config.DBSource)
 	if err != nil {
 		log.Fatal("Cannot connect to db: ", err)
 	}
@@ -25,7 +24,7 @@ func main() {
 	store := db.NewStore(conn)
 	server := api.NewServer(store)
 
-	err = server.Start(serverAddress)
+	err = server.Start(config.ServerAddress)
 	if err != nil {
 		log.Fatal("Cannot start server: ", err)
 	}
