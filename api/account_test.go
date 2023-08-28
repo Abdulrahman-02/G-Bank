@@ -82,7 +82,7 @@ func TestGetAccountAPI(t *testing.T) {
 			tc.buildStubs(store)
 
 			// create test server
-			server := NewServer(store)
+			server := newTestServer(t, store)
 			recorder := httptest.NewRecorder()
 
 			// create test request
@@ -106,7 +106,7 @@ func TestGetAccountAPI(t *testing.T) {
 	store.EXPECT().GetAccount(gomock.Any(), gomock.Eq(account.ID)).Times(1).Return(account, nil).Return(account, nil)
 
 	// start test server and send request
-	server := NewServer(store)
+	server := newTestServer(t, store)
 	recorder := httptest.NewRecorder()
 
 	url := fmt.Sprintf("/accounts/%d", account.ID)
