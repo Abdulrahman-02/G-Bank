@@ -14,13 +14,13 @@ import (
 type createUserRequest struct {
 	Username string `json:"username" binding:"required,alphanum"`
 	Password string `json:"password" binding:"required,min=6"`
-	Fullname string `json:"fullname" binding:"required"`
+	FullName string `json:"full_name" binding:"required"`
 	Email    string `json:"email" binding:"required,email"`
 }
 
 type userResponse struct {
 	Username          string    `json:"username"`
-	Fullname          string    `json:"fullname"`
+	FullName          string    `json:"full_name"`
 	Email             string    `json:"email"`
 	PasswordChangedAt time.Time `json:"password_changed_at"`
 	CreatedAt         time.Time `json:"created_at"`
@@ -29,14 +29,13 @@ type userResponse struct {
 func newUserResponse(user db.Users) userResponse {
 	return userResponse{
 		Username:          user.Username,
-		Fullname:          user.FullName,
+		FullName:          user.FullName,
 		Email:             user.Email,
 		PasswordChangedAt: user.PasswordChangedAt,
 		CreatedAt:         user.CreatedAt,
 	}
 }
 
-// createUserRequest defines the body for create account API.
 func (server *Server) createUser(ctx *gin.Context) {
 	var req createUserRequest
 	if err := ctx.ShouldBindJSON(&req); err != nil {
@@ -53,7 +52,7 @@ func (server *Server) createUser(ctx *gin.Context) {
 	arg := db.CreateUserParams{
 		Username:       req.Username,
 		HashedPassword: hashedPassword,
-		FullName:       req.Fullname,
+		FullName:       req.FullName,
 		Email:          req.Email,
 	}
 
@@ -69,10 +68,9 @@ func (server *Server) createUser(ctx *gin.Context) {
 		ctx.JSON(http.StatusInternalServerError, errorResponse(err))
 		return
 	}
+
 	rsp := newUserResponse(user)
-
 	ctx.JSON(http.StatusOK, rsp)
-
 }
 
 type loginUserRequest struct {
@@ -81,8 +79,8 @@ type loginUserRequest struct {
 }
 
 type loginUserResponse struct {
-	AccesToken string       `json:"access_token"`
-	User       userResponse `json:"user"`
+	AccessToken string       `json:"access_token"`
+	User        userResponse `json:"user"`
 }
 
 func (server *Server) loginUser(ctx *gin.Context) {
@@ -95,10 +93,10 @@ func (server *Server) loginUser(ctx *gin.Context) {
 	user, err := server.store.GetUser(ctx, req.Username)
 	if err != nil {
 		if err == sql.ErrNoRows {
-			ctx.JSON(http.StatusUnauthorized, errorResponse(err))
+			ctx.JSON(http.StatusNotFound, errorResponse(err))
 			return
 		}
-		ctx.JSON(http.StatusUnauthorized, errorResponse(err))
+		ctx.JSON(http.StatusInternalServerError, errorResponse(err))
 		return
 	}
 
@@ -112,16 +110,14 @@ func (server *Server) loginUser(ctx *gin.Context) {
 		user.Username,
 		server.config.AccesTokenDuration,
 	)
-
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, errorResponse(err))
 		return
 	}
 
 	rsp := loginUserResponse{
-		AccesToken: accessToken,
-		User:       newUserResponse(user),
+		AccessToken: accessToken,
+		User:        newUserResponse(user),
 	}
-
 	ctx.JSON(http.StatusOK, rsp)
 }
