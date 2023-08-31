@@ -16,6 +16,7 @@ spec:
     spec:
       containers:
       - name: g-bank-api
-        image: 364141850470.dkr.ecr.eu-west-3.amazonaws.com/g-bank:c057a431af5513a2b90a11d3294f93acc113eb61
+        image: 364141850470.dkr.ecr.eu-west-3.amazonaws.com/g-bank:c057a431af5513a2b90a11d3294f93acc113eb61:latest
+        imagePullPolicy: Always
         ports:
         - containerPort: 8080
