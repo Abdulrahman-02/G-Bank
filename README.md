@@ -3,13 +3,12 @@
 This repository contains the codes of the [Backend Master Class](https://bit.ly/backendmaster) course.
 
 This course is a step-by-step guide on how to design, develop, test and deploy a backend web service from scratch.
+
 The backend service is a simple bank system that allows:
 
 - Create and manage accounts and users.
 - Record all balance changes to each account.
 - Make transfers between accounts.
-
-The course is divided into 6 sections:
 
 ## Course Outline
 
@@ -106,3 +105,4 @@ The course is divided into 6 sections:
 - Lecture #39: [Introduction to gRPC](docs/39-%20Introduction%20to%20gRPC.md)
 - Lecture #40: [Define gRPC API and generate Go code with protobug](docs/40-%20Define%20gRPC%20API%20and%20generate%20Go%20code%20with%20protobug.md)
 - Lecture #41: [How to run gRPC server](docs/41-%20How%20to%20run%20gRPC%20server.md)
+- Lecture #42: [Implement gRPC API](docs/42-%20Implement%20gRPC%20API.md)
