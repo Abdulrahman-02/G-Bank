@@ -106,3 +106,4 @@ The backend service is a simple bank system that allows:
 - Lecture #40: [Define gRPC API and generate Go code with protobug](docs/40-%20Define%20gRPC%20API%20and%20generate%20Go%20code%20with%20protobug.md)
 - Lecture #41: [How to run gRPC server](docs/41-%20How%20to%20run%20gRPC%20server.md)
 - Lecture #42: [Implement gRPC API](docs/42-%20Implement%20gRPC%20API.md)
+- Lecture #43: [Write code once, serve both gRPC & HTTP requests](docs/43-%20Write%20code%20once,%20serve%20both%20gRPC%20&%20HTTP%20requests.md)

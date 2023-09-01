@@ -1,18 +1,22 @@
 package main
 
 import (
+	"context"
 	"database/sql"
 	"log"
 	"net"
+	"net/http"
 
 	"github.com/abdulrahman-02/G-Bank/api"
 	db "github.com/abdulrahman-02/G-Bank/db/sqlc"
 	gapi "github.com/abdulrahman-02/G-Bank/gAPI"
 	"github.com/abdulrahman-02/G-Bank/pb"
 	"github.com/abdulrahman-02/G-Bank/util"
+	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 	_ "github.com/lib/pq"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
+	"google.golang.org/protobuf/encoding/protojson"
 )
 
 func main() {
@@ -26,7 +30,7 @@ func main() {
 		log.Fatal("Cannot connect to db: ", err)
 	}
 	store := db.NewStore(conn)
-
+	go runGatewayServer(config, store)
 	runGrpcServer(config, store)
 	defer runGinServer(config, store)
 }
@@ -62,5 +66,43 @@ func runGrpcServer(config util.Config, store db.Store) {
 	err = grpcServer.Serve(listener)
 	if err != nil {
 		log.Fatal("Cannot start gRPC server: ", err)
+	}
+}
+
+func runGatewayServer(config util.Config, store db.Store) {
+	server, err := gapi.NewServer(config, store)
+	if err != nil {
+		log.Fatal("Cannot create server: ", err)
+	}
+
+	jsonOption := runtime.WithMarshalerOption(runtime.MIMEWildcard, &runtime.JSONPb{
+		MarshalOptions: protojson.MarshalOptions{
+			UseProtoNames: true,
+		},
+		UnmarshalOptions: protojson.UnmarshalOptions{
+			DiscardUnknown: true,
+		},
+	})
+
+	grpcMux := runtime.NewServeMux(jsonOption)
+
+	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
+	err = pb.RegisterGBankHandlerServer(ctx, grpcMux, server)
+	if err != nil {
+		log.Fatal("Cannot register gateway server: ", err)
+	}
+
+	mux := http.NewServeMux()
+	mux.Handle("/", grpcMux)
+	listener, err := net.Listen("tcp", config.HTTPServerAddress)
+	if err != nil {
+		log.Fatal("Cannot create listener: ", err)
+	}
+
+	log.Printf("Starting HTTP gateway server on %s", listener.Addr().String())
+	err = http.Serve(listener, mux)
+	if err != nil {
+		log.Fatal("Cannot start HTTP gateway server: ", err)
 	}
 }
