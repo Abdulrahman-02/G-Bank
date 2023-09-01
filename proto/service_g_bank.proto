@@ -5,8 +5,22 @@ package pb;
 import "rpc_create_user.proto";
 import "rpc_login_user.proto";
 import "google/api/annotations.proto";
+import "protoc-gen-openapiv2/options/annotations.proto";
 
 option go_package = "github.com/abdulrahman-02/G-Bank/pb";
+
+option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
+    info: {
+        title: "G-Bank";
+        version: "1.0";
+        description: "G-Bank is a simple banking system";
+        contact: {
+            name: "Abdulrahman-02";
+            url: "https://github.com/abdulrahman-02/G-Bank";
+            email: "abderrahmanebenaissa740@gmail.com";
+        };
+    };
+};
 
 service gBank {
     rpc CreateUser (CreateUserRequest) returns (CreateUserResponse) {
