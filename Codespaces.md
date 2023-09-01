@@ -5,7 +5,7 @@
 docker pull postgres
 # Install migrate
 curl -L https://github.com/golang-migrate/migrate/releases/download/v4.14.1/migrate.linux-amd64.tar.gz | tar xvz
-mv migrate.linux-amd64 /usr/local/bin/migrate
+sudo mv migrate.linux-amd64 /usr/local/bin/migrate
 # Install sqlc
 go install github.com/sqlc-dev/sqlc/cmd/sqlc@latest
 # Install mockgen
@@ -22,5 +22,7 @@ go install google.golang.org/protobuf/cmd/protoc-gen-go@v1.28
 go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@v1.2
 # Add $GOPATH/bin to your PATH
 export PATH="$PATH:$(go env GOPATH)/bin"
-
+# Install evans gRPC client
+curl -L https://github.com/ktr0731/evans/releases/download/v0.10.11/evans_linux_amd64.tar.gz | tar xvz
+sudo mv evans /usr/local/bin
 ```
