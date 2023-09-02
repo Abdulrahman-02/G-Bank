@@ -108,4 +108,4 @@ The backend service is a simple bank system that allows:
 - Lecture #42: [Implement gRPC API](docs/42-%20Implement%20gRPC%20API.md)
 - Lecture #43: [Write code once, serve both gRPC & HTTP requests](docs/43-%20Write%20code%20once,%20serve%20both%20gRPC%20&%20HTTP%20requests.md)
 - Lecture #44: [Meta data in gRPC](docs/44-%20Meta%20data%20in%20gRPC.md)
-- Lecture #45: [Generate & serve Swaggre with Go](docs/45-%20Generate%20%26%20serve%20Swaggre%20with%20Go.md)
+- Lecture #45: [Generate & serve Swagger with Go](docs/45-%20Generate%20%26%20serve%20Swaggre%20with%20Go.md)
