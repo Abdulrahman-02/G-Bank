@@ -12,7 +12,7 @@ option go_package = "github.com/abdulrahman-02/G-Bank/pb";
 option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
     info: {
         title: "G-Bank";
-        version: "1.0";
+        version: "1.1";
         description: "G-Bank is a simple banking system";
         contact: {
             name: "Abdulrahman-02";
@@ -28,11 +28,19 @@ service gBank {
             post: "/v1/create_user"
             body: "*"
         };
+        option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+            description: "Use this API to Create a new user";
+            summary: "Create a new user";
+        };
     } 
     rpc LoginUser (LoginUserRequest) returns (LoginUserResponse) {
         option (google.api.http) = {
             post: "/v1/login_user"
             body: "*"
+        };
+        option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+            description: "Use this API to login user and get access token and refresh token";
+            summary: "Login user";
         };
     } 
 }

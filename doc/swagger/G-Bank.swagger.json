@@ -3,7 +3,7 @@
   "info": {
     "title": "G-Bank",
     "description": "G-Bank is a simple banking system",
-    "version": "1.0",
+    "version": "1.1",
     "contact": {
       "name": "Abdulrahman-02",
       "url": "https://github.com/abdulrahman-02/G-Bank",
@@ -24,6 +24,8 @@
   "paths": {
     "/v1/create_user": {
       "post": {
+        "summary": "Create a new user",
+        "description": "Use this API to Create a new user",
         "operationId": "gBank_CreateUser",
         "responses": {
           "200": {
@@ -56,6 +58,8 @@
     },
     "/v1/login_user": {
       "post": {
+        "summary": "Login user",
+        "description": "Use this API to login user and get access token and refresh token",
         "operationId": "gBank_LoginUser",
         "responses": {
           "200": {
