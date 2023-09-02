@@ -113,3 +113,4 @@ The backend service is a simple bank system that allows:
 - Lecture #47: [gRPC params validation](docs/47-%20gRPC%20params%20validation.md)
 - Lecture #48: [Run DB migration with Go](docs/48-%20Run%20DB%20migration%20with%20Go.md)
 - Lecture #49: [Partial update & null params in go with sqlc](docs/49-%20Partial%20update%20%26%20null%20params%20in%20go%20with%20sqlc.md)
+- Lecture #50: [Build gRPC update with optional parameters](docs/50-%20Build%20gRPC%20update%20with%20optional%20parameters.md)

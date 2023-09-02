@@ -3,7 +3,7 @@
   "info": {
     "title": "G-Bank",
     "description": "G-Bank is a simple banking system",
-    "version": "1.1",
+    "version": "1.2",
     "contact": {
       "name": "Abdulrahman-02",
       "url": "https://github.com/abdulrahman-02/G-Bank",
@@ -89,6 +89,40 @@
           "gBank"
         ]
       }
+    },
+    "/v1/update_user": {
+      "post": {
+        "summary": "Update user",
+        "description": "Use this API to update user",
+        "operationId": "gBank_UpdateUser",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/pbUpdateUserResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/pbUpdateUserRequest"
+            }
+          }
+        ],
+        "tags": [
+          "gBank"
+        ]
+      }
     }
   },
   "definitions": {
@@ -150,6 +184,31 @@
         "refreshTokenExpiresAt": {
           "type": "string",
           "format": "date-time"
+        }
+      }
+    },
+    "pbUpdateUserRequest": {
+      "type": "object",
+      "properties": {
+        "username": {
+          "type": "string"
+        },
+        "fullName": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        }
+      }
+    },
+    "pbUpdateUserResponse": {
+      "type": "object",
+      "properties": {
+        "user": {
+          "$ref": "#/definitions/pbUser"
         }
       }
     },
