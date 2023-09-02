@@ -109,3 +109,7 @@ The backend service is a simple bank system that allows:
 - Lecture #43: [Write code once, serve both gRPC & HTTP requests](docs/43-%20Write%20code%20once,%20serve%20both%20gRPC%20&%20HTTP%20requests.md)
 - Lecture #44: [Meta data in gRPC](docs/44-%20Meta%20data%20in%20gRPC.md)
 - Lecture #45: [Generate & serve Swagger with Go](docs/45-%20Generate%20%26%20serve%20Swaggre%20with%20Go.md)
+- Lecture #46: [Embed static frontend files inside Golang backend](docs/46-%20Embed%20static%20frontend%20files%20inside%20Golang%20backend.md)
+- Lecture #47: [gRPC params validation](docs/47-%20gRPC%20params%20validation.md)
+- Lecture #48: [Run DB migration with Go](docs/48-%20Run%20DB%20migration%20with%20Go.md)
+- Lecture #49: [Partial update & null params in go with sqlc](docs/49-%20Partial%20update%20%26%20null%20params%20in%20go%20with%20sqlc.md)
