@@ -15,33 +15,55 @@ import (
 )
 
 func (server *Server) UpdateUser(ctx context.Context, req *pb.UpdateUserRequest) (*pb.UpdateUserResponse, error) {
+	authPayload, err := server.authorizeUser(ctx)
+	if err != nil {
+		return nil, unauthenticatedError(err)
+	}
+
 	violations := validateUpdateUserRequest(req)
-	if len(violations) > 0 {
+	if violations != nil {
 		return nil, invalidArgumentError(violations)
+	}
+
+	if authPayload.Username != req.GetUsername() {
+		return nil, status.Errorf(codes.PermissionDenied, "Cannot update other user's profile")
 	}
 
 	arg := db.UpdateUserParams{
 		Username: req.GetUsername(),
-		FullName: sql.NullString{String: req.GetFullName(), Valid: true},
-		Email:    sql.NullString{String: req.GetEmail(), Valid: true},
+		FullName: sql.NullString{
+			String: req.GetFullName(),
+			Valid:  req.FullName != "",
+		},
+		Email: sql.NullString{
+			String: req.GetEmail(),
+			Valid:  req.Email != "",
+		},
 	}
 
 	if req.Password != "" {
 		hashedPassword, err := util.HashPassword(req.GetPassword())
 		if err != nil {
-			return nil, status.Errorf(codes.Internal, "Failed to hash password: %s", err)
+			return nil, status.Errorf(codes.Internal, "failed to hash password: %s", err)
 		}
 
-		arg.HashedPassword = sql.NullString{String: hashedPassword, Valid: true}
-		arg.PasswordChangedAt = sql.NullTime{Time: time.Now(), Valid: true}
+		arg.HashedPassword = sql.NullString{
+			String: hashedPassword,
+			Valid:  true,
+		}
+
+		arg.PasswordChangedAt = sql.NullTime{
+			Time:  time.Now(),
+			Valid: true,
+		}
 	}
 
 	user, err := server.store.UpdateUser(ctx, arg)
 	if err != nil {
 		if err == sql.ErrNoRows {
-			return nil, status.Error(codes.NotFound, "User not found")
+			return nil, status.Errorf(codes.NotFound, "user not found")
 		}
-		return nil, status.Errorf(codes.Internal, "Failed to update user: %s", err)
+		return nil, status.Errorf(codes.Internal, "failed to update user: %s", err)
 	}
 
 	rsp := &pb.UpdateUserResponse{
