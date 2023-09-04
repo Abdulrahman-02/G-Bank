@@ -3,9 +3,12 @@ package main
 import (
 	"context"
 	"database/sql"
-	"log"
 	"net"
 	"net/http"
+	"os"
+
+	"github.com/rs/zerolog"
+	"github.com/rs/zerolog/log"
 
 	"github.com/abdulrahman-02/G-Bank/api"
 	db "github.com/abdulrahman-02/G-Bank/db/sqlc"
@@ -25,14 +28,19 @@ import (
 )
 
 func main() {
+
 	config, err := util.LoadConfig(".")
 	if err != nil {
-		log.Fatal("Cannot load config: ", err)
+		log.Fatal().Msg("Cannot load config: ")
+	}
+
+	if config.Environment == "development" {
+		log.Logger = log.Output(zerolog.ConsoleWriter{Out: os.Stderr})
 	}
 
 	conn, err := sql.Open(config.DBDriver, config.DBSource)
 	if err != nil {
-		log.Fatal("Cannot connect to db: ", err)
+		log.Fatal().Msg("Cannot connect to db: ")
 	}
 
 	// run db migration
@@ -47,52 +55,53 @@ func main() {
 func runDBMigration(migrationURL string, dbSource string) {
 	migration, err := migrate.New(migrationURL, dbSource)
 	if err != nil {
-		log.Fatal("cannot create a new migrate instance:", err)
+		log.Fatal().Msg("cannot create a new migrate instance")
 	}
 	if err = migration.Up(); err != nil && err != migrate.ErrNoChange {
-		log.Fatal("failed to run migrate up:", err)
+		log.Fatal().Msg("failed to run migrate up:")
 	}
-	log.Println("db migrated successfully")
+	log.Info().Msg("db migrated successfully")
 }
 
 func runGinServer(config util.Config, store db.Store) {
 	server, err := api.NewServer(config, store)
 	if err != nil {
-		log.Fatal("Cannot create server: ", err)
+		log.Fatal().Msg("Cannot create server: ")
 	}
 
 	err = server.Start(config.HTTPServerAddress)
 	if err != nil {
-		log.Fatal("Cannot start server: ", err)
+		log.Fatal().Msg("Cannot start server: ")
 	}
 }
 
 func runGrpcServer(config util.Config, store db.Store) {
 	server, err := gapi.NewServer(config, store)
 	if err != nil {
-		log.Fatal("Cannot create server: ", err)
+		log.Fatal().Msg("Cannot create server: ")
 	}
 
-	grpcServer := grpc.NewServer()
+	grpcLogger := grpc.UnaryInterceptor(gapi.GrpcLogger)
+	grpcServer := grpc.NewServer(grpcLogger)
 	pb.RegisterGBankServer(grpcServer, server)
 	reflection.Register(grpcServer)
 
 	listener, err := net.Listen("tcp", config.GRPCServerAddress)
 	if err != nil {
-		log.Fatal("Cannot create listener: ", err)
+		log.Fatal().Msg("Cannot create listener: ")
 	}
 
-	log.Printf("Starting gRPC server on %s", listener.Addr().String())
+	log.Info().Msgf("Starting gRPC server on %s", listener.Addr().String())
 	err = grpcServer.Serve(listener)
 	if err != nil {
-		log.Fatal("Cannot start gRPC server: ", err)
+		log.Fatal().Msg("Cannot start gRPC server: ")
 	}
 }
 
 func runGatewayServer(config util.Config, store db.Store) {
 	server, err := gapi.NewServer(config, store)
 	if err != nil {
-		log.Fatal("Cannot create server: ", err)
+		log.Fatal().Msg("Cannot create server: ")
 	}
 
 	jsonOption := runtime.WithMarshalerOption(runtime.MIMEWildcard, &runtime.JSONPb{
@@ -110,7 +119,7 @@ func runGatewayServer(config util.Config, store db.Store) {
 	defer cancel()
 	err = pb.RegisterGBankHandlerServer(ctx, grpcMux, server)
 	if err != nil {
-		log.Fatal("Cannot register gateway server: ", err)
+		log.Fatal().Msg("Cannot register gateway server: ")
 	}
 
 	mux := http.NewServeMux()
@@ -118,19 +127,19 @@ func runGatewayServer(config util.Config, store db.Store) {
 
 	statikFS, err := fs.New()
 	if err != nil {
-		log.Fatal("Cannot create statik file system: ", err)
+		log.Fatal().Msg("Cannot create statik file system: ")
 	}
 	swaggerHandler := http.StripPrefix("/swagger/", http.FileServer(statikFS))
 	mux.Handle("/swagger/", http.StripPrefix("/swagger/", swaggerHandler))
 
 	listener, err := net.Listen("tcp", config.HTTPServerAddress)
 	if err != nil {
-		log.Fatal("Cannot create listener: ", err)
+		log.Fatal().Msg("Cannot create listener: ")
 	}
 
-	log.Printf("Starting HTTP gateway server on %s", listener.Addr().String())
+	log.Info().Msgf("Starting HTTP gateway server on %s", listener.Addr().String())
 	err = http.Serve(listener, mux)
 	if err != nil {
-		log.Fatal("Cannot start HTTP gateway server: ", err)
+		log.Fatal().Msg("Cannot start HTTP gateway server: ")
 	}
 }

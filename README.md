@@ -115,3 +115,4 @@ The backend service is a simple bank system that allows:
 - Lecture #49: [Partial update & null params in go with sqlc](docs/49-%20Partial%20update%20%26%20null%20params%20in%20go%20with%20sqlc.md)
 - Lecture #50: [Build gRPC update with optional parameters](docs/50-%20Build%20gRPC%20update%20with%20optional%20parameters.md)
 - Lecture #51: [Add authorization to protect gRPC API](docs/51-%20Add%20authorization%20to%20protect%20gRPC%20API.md)
+- Lecture #52: [Write structured logs for gRPC APIs](docs/52-%20Write%20structured%20logs%20for%20gRPC%20APIs.md)
