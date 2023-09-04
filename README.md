@@ -116,3 +116,4 @@ The backend service is a simple bank system that allows:
 - Lecture #50: [Build gRPC update with optional parameters](docs/50-%20Build%20gRPC%20update%20with%20optional%20parameters.md)
 - Lecture #51: [Add authorization to protect gRPC API](docs/51-%20Add%20authorization%20to%20protect%20gRPC%20API.md)
 - Lecture #52: [Write structured logs for gRPC APIs](docs/52-%20Write%20structured%20logs%20for%20gRPC%20APIs.md)
+- Lecture #53: [HTTP logger middleware](docs/53-%20HTTP%20logger%20middleware.md)
