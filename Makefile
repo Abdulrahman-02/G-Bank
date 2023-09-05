@@ -1,7 +1,8 @@
 DB_URL = postgresql://root:password@localhost:5432/G-Bank?sslmode=disable
 
 postgres:
-	docker run --name postgres-1 --network g-bank-network -p 5432:5432 -e POSTGRES_USER=root -e POSTGRES_PASSWORD=password -d postgres
+	docker run --name postgres-1 --network g-bank-network -p 5432:5432 \
+	-e POSTGRES_USER=root -e POSTGRES_PASSWORD=password -d postgres
 createdb:
 	docker exec -it postgres-1 createdb --username=root --owner=root G-Bank
 
@@ -50,4 +51,8 @@ proto:
 evans:
 	evans --host localhost --port 9090 -r repl
 
-.PHONY: postgres createdb dropdb migrateup  migratedown migrateup1 migratedown1 dbdocs dbdchema sqlc test server mock proto evans
+redis:
+	docker run --name redis-1 -p 6379:6379 -d redis:7-alpine
+
+.PHONY: postgres createdb dropdb migrateup  migratedown migrateup1 migratedown1 dbdocs dbdchema \
+		sqlc test server mock proto evans redis

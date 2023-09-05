@@ -117,3 +117,5 @@ The backend service is a simple bank system that allows:
 - Lecture #51: [Add authorization to protect gRPC API](docs/51-%20Add%20authorization%20to%20protect%20gRPC%20API.md)
 - Lecture #52: [Write structured logs for gRPC APIs](docs/52-%20Write%20structured%20logs%20for%20gRPC%20APIs.md)
 - Lecture #53: [HTTP logger middleware](docs/53-%20HTTP%20logger%20middleware.md)
+- Lecture #54: [Process async tasks with background workers](docs/54-%20Process%20async%20tasks%20with%20background%20workers.md)
+- Lecture #55: [Integrate async worker to Go web server](docs/55-%20Integrate%20async%20worker%20to%20Go%20web%20server.md)
