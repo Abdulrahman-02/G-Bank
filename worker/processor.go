@@ -5,6 +5,7 @@ import (
 
 	db "github.com/abdulrahman-02/G-Bank/db/sqlc"
 	"github.com/hibiken/asynq"
+	"github.com/rs/zerolog/log"
 )
 
 const (
@@ -30,6 +31,11 @@ func NewRedisTaskProcessor(redisOpt asynq.RedisClientOpt, store db.Store) TaskPr
 				QueueCritical: 10,
 				QueueDefault:  5,
 			},
+			ErrorHandler: asynq.ErrorHandlerFunc(func(ctx context.Context, task *asynq.Task, err error) {
+				log.Error().Err(err).Str("type", task.Type()).
+					Bytes("payload", task.Payload()).Msg("Error processing task")
+			}),
+			Logger: NewLogger(),
 		},
 	)
 	return &RedisTaskProcessor{
