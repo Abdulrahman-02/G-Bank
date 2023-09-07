@@ -121,3 +121,6 @@ The backend service is a simple bank system that allows:
 - Lecture #55: [Integrate async worker to Go web server](docs/55-%20Integrate%20async%20worker%20to%20Go%20web%20server.md)
 - Lecture #56: [Send async tasks to Redis within a DB transaction](docs/56-%20Send%20async%20tasks%20to%20Redis%20within%20a%20DB%20transaction.md)
 - Lecture #57: [How to handle errors and print logs for Go Asynq workers](docs/57-%20How%20to%20handle%20errors%20and%20print%20logs%20for%20Go%20Asynq%20workers.md)
+- Lecture #58: [The importance of delay in async tasks](docs/58-%20The%20importance%20of%20delay%20in%20async%20tasks.md)
+- Lecture #59: [How to send emails in go](docs/59-%20How%20to%20send%20emails%20in%20go.md)
+- Lecture #60: [How to skip test](docs/60-%20How%20to%20skip%20test.md)
