@@ -15,6 +15,7 @@ import (
 	db "github.com/abdulrahman-02/G-Bank/db/sqlc"
 	_ "github.com/abdulrahman-02/G-Bank/doc/statik"
 	gapi "github.com/abdulrahman-02/G-Bank/gAPI"
+	"github.com/abdulrahman-02/G-Bank/mail"
 	"github.com/abdulrahman-02/G-Bank/pb"
 	"github.com/abdulrahman-02/G-Bank/util"
 	"github.com/abdulrahman-02/G-Bank/worker"
@@ -56,14 +57,15 @@ func main() {
 
 	taskDistributor := worker.NewRedisTaskDistributor(redisOpt)
 
-	go runTaskProcessor(redisOpt, store)
+	go runTaskProcessor(config, redisOpt, store)
 	go runGatewayServer(config, store, taskDistributor)
 	runGrpcServer(config, store, taskDistributor)
 	defer runGinServer(config, store)
 }
 
-func runTaskProcessor(redisOpt asynq.RedisClientOpt, store db.Store) {
-	taskProcessor := worker.NewRedisTaskProcessor(redisOpt, store)
+func runTaskProcessor(config util.Config, redisOpt asynq.RedisClientOpt, store db.Store) {
+	mailer := mail.NewGmailSender(config.EmailSenderAddress, config.EmailSenderAddress, config.EmailSenderPassword)
+	taskProcessor := worker.NewRedisTaskProcessor(redisOpt, store, mailer)
 	log.Info().Msg("Starting task processor")
 	err := taskProcessor.Start()
 	if err != nil {

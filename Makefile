@@ -21,10 +21,13 @@ migratedown:
 migratedown1:
 	migrate -path db/migration -database "$(DB_URL)" -verbose down 1
 
+new_migration:
+	migrate create -ext sql -dir db/migration -seq $(name)
+
 dbdocs:
 	dbdocs build doc/db.dbml
 
-dbdchema:
+db_schema:
 	dbml2sql --postgres -o doc/schema.sql doc/db.dbml
 sqlc:
 	sqlc generate
@@ -55,4 +58,4 @@ redis:
 	docker run --name redis-1 -p 6379:6379 -d redis:7-alpine
 
 .PHONY: postgres createdb dropdb migrateup  migratedown migrateup1 migratedown1 dbdocs dbdchema \
-		sqlc test server mock proto evans redis
+		sqlc test server mock proto evans redis new_migration
