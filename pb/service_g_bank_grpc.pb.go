@@ -19,9 +19,10 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	GBank_CreateUser_FullMethodName = "/pb.gBank/CreateUser"
-	GBank_UpdateUser_FullMethodName = "/pb.gBank/UpdateUser"
-	GBank_LoginUser_FullMethodName  = "/pb.gBank/LoginUser"
+	GBank_CreateUser_FullMethodName  = "/pb.gBank/CreateUser"
+	GBank_UpdateUser_FullMethodName  = "/pb.gBank/UpdateUser"
+	GBank_LoginUser_FullMethodName   = "/pb.gBank/LoginUser"
+	GBank_VerifyEmail_FullMethodName = "/pb.gBank/VerifyEmail"
 )
 
 // GBankClient is the client API for GBank service.
@@ -31,6 +32,7 @@ type GBankClient interface {
 	CreateUser(ctx context.Context, in *CreateUserRequest, opts ...grpc.CallOption) (*CreateUserResponse, error)
 	UpdateUser(ctx context.Context, in *UpdateUserRequest, opts ...grpc.CallOption) (*UpdateUserResponse, error)
 	LoginUser(ctx context.Context, in *LoginUserRequest, opts ...grpc.CallOption) (*LoginUserResponse, error)
+	VerifyEmail(ctx context.Context, in *VerifyEmailRequest, opts ...grpc.CallOption) (*VerifyEmailResponse, error)
 }
 
 type gBankClient struct {
@@ -68,6 +70,15 @@ func (c *gBankClient) LoginUser(ctx context.Context, in *LoginUserRequest, opts 
 	return out, nil
 }
 
+func (c *gBankClient) VerifyEmail(ctx context.Context, in *VerifyEmailRequest, opts ...grpc.CallOption) (*VerifyEmailResponse, error) {
+	out := new(VerifyEmailResponse)
+	err := c.cc.Invoke(ctx, GBank_VerifyEmail_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // GBankServer is the server API for GBank service.
 // All implementations must embed UnimplementedGBankServer
 // for forward compatibility
@@ -75,6 +86,7 @@ type GBankServer interface {
 	CreateUser(context.Context, *CreateUserRequest) (*CreateUserResponse, error)
 	UpdateUser(context.Context, *UpdateUserRequest) (*UpdateUserResponse, error)
 	LoginUser(context.Context, *LoginUserRequest) (*LoginUserResponse, error)
+	VerifyEmail(context.Context, *VerifyEmailRequest) (*VerifyEmailResponse, error)
 	mustEmbedUnimplementedGBankServer()
 }
 
@@ -90,6 +102,9 @@ func (UnimplementedGBankServer) UpdateUser(context.Context, *UpdateUserRequest) 
 }
 func (UnimplementedGBankServer) LoginUser(context.Context, *LoginUserRequest) (*LoginUserResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method LoginUser not implemented")
+}
+func (UnimplementedGBankServer) VerifyEmail(context.Context, *VerifyEmailRequest) (*VerifyEmailResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method VerifyEmail not implemented")
 }
 func (UnimplementedGBankServer) mustEmbedUnimplementedGBankServer() {}
 
@@ -158,6 +173,24 @@ func _GBank_LoginUser_Handler(srv interface{}, ctx context.Context, dec func(int
 	return interceptor(ctx, in, info, handler)
 }
 
+func _GBank_VerifyEmail_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(VerifyEmailRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(GBankServer).VerifyEmail(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: GBank_VerifyEmail_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(GBankServer).VerifyEmail(ctx, req.(*VerifyEmailRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // GBank_ServiceDesc is the grpc.ServiceDesc for GBank service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -176,6 +209,10 @@ var GBank_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "LoginUser",
 			Handler:    _GBank_LoginUser_Handler,
+		},
+		{
+			MethodName: "VerifyEmail",
+			Handler:    _GBank_VerifyEmail_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

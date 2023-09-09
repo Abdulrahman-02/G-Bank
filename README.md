@@ -125,3 +125,4 @@ The backend service is a simple bank system that allows:
 - Lecture #59: [How to send emails in go](docs/59-%20How%20to%20send%20emails%20in%20go.md)
 - Lecture #60: [How to skip test](docs/60-%20How%20to%20skip%20test.md)
 - Lecture #61: [Email verification](docs/61-%20Email%20verification.md)
+- Lecture #62: [Implement email verfication API](docs/62-%20Implement%20email%20verfication%20API.md)
