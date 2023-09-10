@@ -126,3 +126,4 @@ The backend service is a simple bank system that allows:
 - Lecture #60: [How to skip test](docs/60-%20How%20to%20skip%20test.md)
 - Lecture #61: [Email verification](docs/61-%20Email%20verification.md)
 - Lecture #62: [Implement email verfication API](docs/62-%20Implement%20email%20verfication%20API.md)
+- Lecture #63: [How to unit test gRPC services](docs/63-%20How%20to%20unit%20test%20gRPC%20services.md)
