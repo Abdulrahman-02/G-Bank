@@ -128,3 +128,4 @@ The backend service is a simple bank system that allows:
 - Lecture #62: [Implement email verfication API](docs/62-%20Implement%20email%20verfication%20API.md)
 - Lecture #63: [How to unit test gRPC services](docs/63-%20How%20to%20unit%20test%20gRPC%20services.md)
 - Lecture #64: [Unit test gRPC auth](docs/64-%20Unit%20test%20gRPC%20auth.md)
+- Lecture #65: [Config sqlc version 2](docs/65-%20Config%20sqlc%20version%20)
