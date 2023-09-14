@@ -8,7 +8,6 @@ import (
 
 	"github.com/abdulrahman-02/G-Bank/util"
 	"github.com/jackc/pgx/v5/pgxpool"
-	_ "github.com/lib/pq"
 )
 
 var testStore Store
