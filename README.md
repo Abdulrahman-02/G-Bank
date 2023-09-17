@@ -130,3 +130,6 @@ The backend service is a simple bank system that allows:
 - Lecture #64: [Unit test gRPC auth](docs/64-%20Unit%20test%20gRPC%20auth.md)
 - Lecture #65: [Config sqlc version 2](docs/65-%20Config%20sqlc%20version%20)
 - Lecture #66: [Switch DB driver to pgx](docs/66-%20Switch%20DB%20driver%20to%20pgx.md)
+- Lecture #67: [Handle DB erros with PGX](docs/67-%20Handle%20DB%20erros%20with%20PGX.md)
+- Lecture #68: [Docker compose](docs/68-%20Docker%20compose.md)
+- Lecture #69: [Golang binary packages](docs/69-%20Golang%20binary%20packages.md)
